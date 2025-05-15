@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ITM Personal Development Tracker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: #ddd;
+    }
+
+    nav {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    #toggle-dark {
+      background: white;
+      color: #3498db;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .section {
+      background-color: #fff;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+    }
+
+    .dark-mode .section {
+      background-color: #1e1e1e;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    ul {
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      background: #f9f9f9;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-left: 5px solid #3498db;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .completed {
+      background-color: #d4edda;
+      border-left-color: #2ecc71;
+      text-decoration: line-through;
+    }
+
+    .progress-bar-container {
+      background: #ddd;
+      border-radius: 25px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .progress-bar {
+      height: 25px;
+      background-color: #2ecc71;
+      text-align: center;
+      color: white;
+      font-weight: bold;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .badge {
+      background-color: gold;
+      text-align: center;
+      padding: 10px;
+      margin-top: 10px;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+
+    .filter-btn {
+      margin: 5px;
+      padding: 8px 12px;
+      border: none;
+      cursor: pointer;
+      background: #ddd;
+      border-radius: 5px;
+    }
+
+    .filter-btn.active {
+      background-color: #3498db;
+      color: white;
+    }
+
+    h1 img {
+      width: 50px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div>
+      <a href="#student-info">Student</a>
+      <a href="#about-itm">About</a>
+      <a href="#activities">Activities</a>
+      <a href="#skills">Skills</a>
+      <a href="#goals">Goals</a>
+      <a href="#feedback">Feedback</a>
+    </div>
+    <button id="toggle-dark">🌙 Toggle Dark Mode</button>
+  </nav>
+
+  <h1>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiuDnptzX0AvfWrAgcLu_YgwNukDS81c_lHg9S1yGinFcSBKYUCDYUmZH8DIuy_VA6AyQ&usqp=CAU" alt="ITM Logo" />
+    ITM Personal Development Tracker
+  </h1>
+
+  <div class="section" id="student-info">
+    <h2>👤 Student Information</h2>
+    <label>Full Name <input type="text" /></label>
+    <label>Roll Number <input type="text" /></label>
+    <label>Course / Branch <input type="text" /></label>
+    <label>Email <input type="email" /></label>
+  </div>
+
+  <div class="section" id="about-itm">
+    <h2>🏫 About ITM</h2>
+    <p>
+      ITM Group of Institutions is a leading provider of professional education in India. Established in 1991, the group offers programs across Engineering, Business, Health Science, and Design. 
+      ITM emphasizes skill-based learning, industry collaboration, and innovation-driven development through cutting-edge facilities and modern pedagogy.
+    </p>
+  </div>
+
+  <div class="section" id="activities">
+    <h2>📌 Development Activities</h2>
+    <form id="activity-form">
+      <input type="text" id="activity-input" placeholder="Add a development activity..." required />
+      <button type="submit">➕ Add</button>
+    </form>
+
+    <div>
+      <button class="filter-btn active" onclick="filterActivities('all')">All</button>
+      <button class="filter-btn" onclick="filterActivities('completed')">Completed</button>
+      <button class="filter-btn" onclick="filterActivities('pending')">Pending</button>
+    </div>
+
+    <ul id="activity-list"></ul>
+    <div class="progress-bar-container">
+      <div id="progress-bar" class="progress-bar">0%</div>
+    </div>
+    <div id="badge-container"></div>
+  </div>
+
+  <div class="section" id="skills">
+    <h2>🛠️ Skill Development Tracker</h2>
+    <label><input type="checkbox" onchange="updateSkills()"> Communication Skills</label>
+    <label><input type="checkbox" onchange="updateSkills()"> Teamwork</label>
+    <label><input type="checkbox" onchange="updateSkills()"> Problem Solving</label>
+    <label><input type="checkbox" onchange="updateSkills()"> Time Management</label>
+  </div>
+
+  <div class="section" id="goals">
+    <h2>🎯 Set Your Goals</h2>
+    <label>Short-Term Goals <textarea rows="3"></textarea></label>
+    <label>Long-Term Goals <textarea rows="4"></textarea></label>
+  </div>
+
+  <div class="section" id="feedback">
+    <h2>🗣️ Feedback</h2>
+    <label>Your Suggestions or Comments</label>
+    <textarea rows="4" placeholder="Let us know what we can improve..."></textarea>
+  </div>
+
+  <script>
+    const form = document.getElementById('activity-form');
+    const input = document.getElementById('activity-input');
+    const list = document.getElementById('activity-list');
+    const progressBar = document.getElementById('progress-bar');
+    const badgeContainer = document.getElementById('badge-container');
+
+    let activities = JSON.parse(localStorage.getItem('activities')) || [];
+    let filter = 'all';
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (text) {
+        activities.push({ text, completed: false });
+        input.value = '';
+        updateLocalStorage();
+        renderActivities();
+      }
+    });
+
+    function toggleComplete(index) {
+      activities[index].completed = !activities[index].completed;
+      updateLocalStorage();
+      renderActivities();
+    }
+
+    function deleteActivity(index) {
+      activities.splice(index, 1);
+      updateLocalStorage();
+      renderActivities();
+    }
+
+    function filterActivities(type) {
+      filter = type;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.filter-btn[onclick*="${type}"]`).classList.add('active');
+      renderActivities();
+    }
+
+    function renderActivities() {
+      list.innerHTML = '';
+      let filtered = activities;
+      if (filter === 'completed') {
+        filtered = activities.filter(a => a.completed);
+      } else if (filter === 'pending') {
+        filtered = activities.filter(a => !a.completed);
+      }
+
+      filtered.forEach((activity, index) => {
+        const li = document.createElement('li');
+        li.className = activity.completed ? 'completed' : '';
+        li.innerHTML = `
+          <span>${activity.text}</span>
+          <div>
+            <button onclick="toggleComplete(${index})">✅</button>
+            <button onclick="deleteActivity(${index})">🗑️</button>
+          </div>`;
+        list.appendChild(li);
+      });
+      updateProgress();
+    }
+
+    function updateLocalStorage() {
+      localStorage.setItem('activities', JSON.stringify(activities));
+    }
+
+    function updateProgress() {
+      const total = activities.length;
+      const completed = activities.filter(a => a.completed).length;
+      const percent = total ? Math.round((completed / total) * 100) : 0;
+      progressBar.style.width = percent + '%';
+      progressBar.textContent = percent + '%';
+      badgeContainer.innerHTML = percent === 100 && total > 0
+        ? '<div class="badge">🏅 All activities completed!</div>'
+        : '';
+    }
+
+    function updateSkills() {
+      console.log('Skill checkbox changed');
+    }
+
+    document.getElementById('toggle-dark').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+
+    renderActivities();
+  </script>
+</body>
+</html>
